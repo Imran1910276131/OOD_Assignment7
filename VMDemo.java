@@ -4,12 +4,12 @@ interface VMState {
     void dispense(String item);
 }
 
-class Vending {
+class VendingContext {
     private VMState state;
     private int balance;
 
-    public Vending() {
-        state = new NoMoney(this);
+    public VendingContext() {
+        state = new NoMoneyState(this);
     }
 
     public void setState(VMState state) {
@@ -37,10 +37,10 @@ class Vending {
     }
 }
 
-class NoMoney implements VMState {
-    private final Vending vm;
+class NoMoneyState implements VMState {
+    private final VendingContext vm;
 
-    public NoMoney(Vending vm) {
+    public NoMoneyState(VendingContext vm) {
         this.vm = vm;
     }
 
@@ -48,7 +48,7 @@ class NoMoney implements VMState {
     public void insert(int amount) {
         vm.setBalance(amount);
         System.out.println(amount + " inserted. Total balance: " + vm.getBalance());
-        vm.setState(new HasMoney(vm));
+        vm.setState(new HasMoneyState(vm));
     }
 
     @Override
@@ -62,10 +62,10 @@ class NoMoney implements VMState {
     }
 }
 
-class HasMoney implements VMState {
-    private final Vending vm;
+class HasMoneyState implements VMState {
+    private final VendingContext vm;
 
-    public HasMoney(Vending vm) {
+    public HasMoneyState(VendingContext vm) {
         this.vm = vm;
     }
 
@@ -94,7 +94,7 @@ class HasMoney implements VMState {
 
 public class VMDemo {
     public static void main(String[] args) {
-        Vending vm = new Vending();
+        VendingContext vm = new VendingContext();
 
         vm.select("Soda"); 
         vm.insert(10);     
